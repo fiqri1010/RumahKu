@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Rumahku</string>
+	<string>RumahKu</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -26,6 +26,10 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>RumahKu memerlukan kamera untuk memindai stiker QR kardus pindahan, barcode ISBN buku, serta memotret barang dan struk.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>RumahKu memerlukan akses galeri untuk melampirkan foto barang, struk pembelian, dan berkas.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

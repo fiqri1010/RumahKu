@@ -11227,7 +11227,7 @@ class MovingProjectsCompanion extends UpdateCompanion<MovingProject> {
 }
 
 class $MovingBoxesTable extends MovingBoxes
-    with TableInfo<$MovingBoxesTable, MovingBoxe> {
+    with TableInfo<$MovingBoxesTable, MovingBox> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
@@ -11433,7 +11433,7 @@ class $MovingBoxesTable extends MovingBoxes
   static const String $name = 'moving_boxes';
   @override
   VerificationContext validateIntegrity(
-    Insertable<MovingBoxe> instance, {
+    Insertable<MovingBox> instance, {
     bool isInserting = false,
   }) {
     final context = VerificationContext();
@@ -11549,9 +11549,9 @@ class $MovingBoxesTable extends MovingBoxes
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  MovingBoxe map(Map<String, dynamic> data, {String? tablePrefix}) {
+  MovingBox map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return MovingBoxe(
+    return MovingBox(
       createdAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}created_at'],
@@ -11621,7 +11621,7 @@ class $MovingBoxesTable extends MovingBoxes
   }
 }
 
-class MovingBoxe extends DataClass implements Insertable<MovingBoxe> {
+class MovingBox extends DataClass implements Insertable<MovingBox> {
   final DateTime createdAt;
   final DateTime updatedAt;
   final DateTime? deletedAt;
@@ -11637,7 +11637,7 @@ class MovingBoxe extends DataClass implements Insertable<MovingBoxe> {
   final String priority;
   final double? weightKg;
   final String? notes;
-  const MovingBoxe({
+  const MovingBox({
     required this.createdAt,
     required this.updatedAt,
     this.deletedAt,
@@ -11711,12 +11711,12 @@ class MovingBoxe extends DataClass implements Insertable<MovingBoxe> {
     );
   }
 
-  factory MovingBoxe.fromJson(
+  factory MovingBox.fromJson(
     Map<String, dynamic> json, {
     ValueSerializer? serializer,
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return MovingBoxe(
+    return MovingBox(
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
       deletedAt: serializer.fromJson<DateTime?>(json['deletedAt']),
@@ -11756,7 +11756,7 @@ class MovingBoxe extends DataClass implements Insertable<MovingBoxe> {
     };
   }
 
-  MovingBoxe copyWith({
+  MovingBox copyWith({
     DateTime? createdAt,
     DateTime? updatedAt,
     Value<DateTime?> deletedAt = const Value.absent(),
@@ -11772,7 +11772,7 @@ class MovingBoxe extends DataClass implements Insertable<MovingBoxe> {
     String? priority,
     Value<double?> weightKg = const Value.absent(),
     Value<String?> notes = const Value.absent(),
-  }) => MovingBoxe(
+  }) => MovingBox(
     createdAt: createdAt ?? this.createdAt,
     updatedAt: updatedAt ?? this.updatedAt,
     deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
@@ -11791,8 +11791,8 @@ class MovingBoxe extends DataClass implements Insertable<MovingBoxe> {
     weightKg: weightKg.present ? weightKg.value : this.weightKg,
     notes: notes.present ? notes.value : this.notes,
   );
-  MovingBoxe copyWithCompanion(MovingBoxesCompanion data) {
-    return MovingBoxe(
+  MovingBox copyWithCompanion(MovingBoxesCompanion data) {
+    return MovingBox(
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
       deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
@@ -11819,7 +11819,7 @@ class MovingBoxe extends DataClass implements Insertable<MovingBoxe> {
 
   @override
   String toString() {
-    return (StringBuffer('MovingBoxe(')
+    return (StringBuffer('MovingBox(')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('deletedAt: $deletedAt, ')
@@ -11860,7 +11860,7 @@ class MovingBoxe extends DataClass implements Insertable<MovingBoxe> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is MovingBoxe &&
+      (other is MovingBox &&
           other.createdAt == this.createdAt &&
           other.updatedAt == this.updatedAt &&
           other.deletedAt == this.deletedAt &&
@@ -11878,7 +11878,7 @@ class MovingBoxe extends DataClass implements Insertable<MovingBoxe> {
           other.notes == this.notes);
 }
 
-class MovingBoxesCompanion extends UpdateCompanion<MovingBoxe> {
+class MovingBoxesCompanion extends UpdateCompanion<MovingBox> {
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
   final Value<DateTime?> deletedAt;
@@ -11936,7 +11936,7 @@ class MovingBoxesCompanion extends UpdateCompanion<MovingBoxe> {
        locationId = Value(locationId),
        boxCode = Value(boxCode),
        labelQr = Value(labelQr);
-  static Insertable<MovingBoxe> custom({
+  static Insertable<MovingBox> custom({
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
     Expression<DateTime>? deletedAt,
@@ -13966,7 +13966,7 @@ final class $$HouseholdsTableReferences
     );
   }
 
-  static MultiTypedResultKey<$MovingBoxesTable, List<MovingBoxe>>
+  static MultiTypedResultKey<$MovingBoxesTable, List<MovingBox>>
   _movingBoxesRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
     db.movingBoxes,
     aliasName: 'households__id__moving_boxes__household_id',
@@ -15200,7 +15200,7 @@ class $$HouseholdsTableTableManager
                         await $_getPrefetchedDataByColumns<
                           Household,
                           $HouseholdsTable,
-                          MovingBoxe,
+                          MovingBox,
                           $MovingBoxesTable
                         >(
                           currentTable: table,
@@ -15704,7 +15704,7 @@ final class $$LocationsTableReferences
     );
   }
 
-  static MultiTypedResultKey<$MovingBoxesTable, List<MovingBoxe>>
+  static MultiTypedResultKey<$MovingBoxesTable, List<MovingBox>>
   _movingBoxesRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
     db.movingBoxes,
     aliasName: 'locations__id__moving_boxes__location_id',
@@ -16135,7 +16135,7 @@ class $$LocationsTableTableManager
                         await $_getPrefetchedDataByColumns<
                           Location,
                           $LocationsTable,
-                          MovingBoxe,
+                          MovingBox,
                           $MovingBoxesTable
                         >(
                           currentTable: table,
@@ -22303,7 +22303,7 @@ final class $$MovingProjectsTableReferences
     );
   }
 
-  static MultiTypedResultKey<$MovingBoxesTable, List<MovingBoxe>>
+  static MultiTypedResultKey<$MovingBoxesTable, List<MovingBox>>
   _movingBoxesRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
     db.movingBoxes,
     aliasName: 'moving_projects__id__moving_boxes__project_id',
@@ -22742,7 +22742,7 @@ class $$MovingProjectsTableTableManager
                         await $_getPrefetchedDataByColumns<
                           MovingProject,
                           $MovingProjectsTable,
-                          MovingBoxe,
+                          MovingBox,
                           $MovingBoxesTable
                         >(
                           currentTable: table,
@@ -22820,7 +22820,7 @@ typedef $$MovingBoxesTableUpdateCompanionBuilder =
     });
 
 final class $$MovingBoxesTableReferences
-    extends BaseReferences<_$AppDatabase, $MovingBoxesTable, MovingBoxe> {
+    extends BaseReferences<_$AppDatabase, $MovingBoxesTable, MovingBox> {
   $$MovingBoxesTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
   static $HouseholdsTable _householdIdTable(_$AppDatabase db) =>
@@ -23276,14 +23276,14 @@ class $$MovingBoxesTableTableManager
         RootTableManager<
           _$AppDatabase,
           $MovingBoxesTable,
-          MovingBoxe,
+          MovingBox,
           $$MovingBoxesTableFilterComposer,
           $$MovingBoxesTableOrderingComposer,
           $$MovingBoxesTableAnnotationComposer,
           $$MovingBoxesTableCreateCompanionBuilder,
           $$MovingBoxesTableUpdateCompanionBuilder,
-          (MovingBoxe, $$MovingBoxesTableReferences),
-          MovingBoxe,
+          (MovingBox, $$MovingBoxesTableReferences),
+          MovingBox,
           PrefetchHooks Function({
             bool householdId,
             bool projectId,
@@ -23376,7 +23376,7 @@ class $$MovingBoxesTableTableManager
           withReferenceMapper: (p0) => p0
               .map(
                 (e) => (
-                  e.readTable<$MovingBoxesTable, MovingBoxe>(table),
+                  e.readTable<$MovingBoxesTable, MovingBox>(table),
                   $$MovingBoxesTableReferences(db, table, e),
                 ),
               )
@@ -23451,14 +23451,14 @@ typedef $$MovingBoxesTableProcessedTableManager =
     ProcessedTableManager<
       _$AppDatabase,
       $MovingBoxesTable,
-      MovingBoxe,
+      MovingBox,
       $$MovingBoxesTableFilterComposer,
       $$MovingBoxesTableOrderingComposer,
       $$MovingBoxesTableAnnotationComposer,
       $$MovingBoxesTableCreateCompanionBuilder,
       $$MovingBoxesTableUpdateCompanionBuilder,
-      (MovingBoxe, $$MovingBoxesTableReferences),
-      MovingBoxe,
+      (MovingBox, $$MovingBoxesTableReferences),
+      MovingBox,
       PrefetchHooks Function({
         bool householdId,
         bool projectId,

@@ -282,6 +282,90 @@ class AppDatabase extends _$AppDatabase {
   }
 
   // ==========================================================================
+  // MOVING PROJECTS & BOXES (MILESTONE 2)
+  // ==========================================================================
+
+  Stream<List<MovingProject>> watchMovingProjects(String householdId) {
+    return (select(movingProjects)
+          ..where(
+            (t) => t.householdId.equals(householdId) & t.deletedAt.isNull(),
+          )
+          ..orderBy([(t) => OrderingTerm.desc(t.createdAt)]))
+        .watch();
+  }
+
+  Future<List<MovingProject>> getMovingProjects(String householdId) {
+    return (select(movingProjects)
+          ..where(
+            (t) => t.householdId.equals(householdId) & t.deletedAt.isNull(),
+          )
+          ..orderBy([(t) => OrderingTerm.desc(t.createdAt)]))
+        .get();
+  }
+
+  Stream<List<MovingBox>> watchMovingBoxesForProject(String projectId) {
+    return (select(movingBoxes)
+          ..where(
+            (t) => t.projectId.equals(projectId) & t.deletedAt.isNull(),
+          )
+          ..orderBy([
+            (t) => OrderingTerm.asc(t.boxCode),
+            (t) => OrderingTerm.asc(t.createdAt),
+          ]))
+        .watch();
+  }
+
+  Stream<List<MovingBox>> watchAllMovingBoxes(String householdId) {
+    return (select(movingBoxes)
+          ..where(
+            (t) => t.householdId.equals(householdId) & t.deletedAt.isNull(),
+          )
+          ..orderBy([(t) => OrderingTerm.asc(t.boxCode)]))
+        .watch();
+  }
+
+  Future<List<MovingBox>> getMovingBoxesForProject(String projectId) {
+    return (select(movingBoxes)
+          ..where(
+            (t) => t.projectId.equals(projectId) & t.deletedAt.isNull(),
+          )
+          ..orderBy([
+            (t) => OrderingTerm.asc(t.boxCode),
+            (t) => OrderingTerm.asc(t.createdAt),
+          ]))
+        .get();
+  }
+
+  Stream<MovingBox?> watchMovingBoxById(String boxId) {
+    return (select(movingBoxes)
+          ..where((t) => t.id.equals(boxId) & t.deletedAt.isNull()))
+        .watchSingleOrNull();
+  }
+
+  Future<MovingBox?> getMovingBoxById(String boxId) {
+    return (select(movingBoxes)
+          ..where((t) => t.id.equals(boxId) & t.deletedAt.isNull()))
+        .getSingleOrNull();
+  }
+
+  Future<MovingBox?> findMovingBoxByCode(
+    String householdId,
+    String boxCode,
+  ) async {
+    final normalized = boxCode.trim().toLowerCase();
+    if (normalized.isEmpty) return null;
+    final all = await (select(movingBoxes)
+          ..where(
+            (t) => t.householdId.equals(householdId) & t.deletedAt.isNull(),
+          ))
+        .get();
+    for (final b in all) {
+      if (b.boxCode.trim().toLowerCase() == normalized) return b;
+    }
+    return null;
+  }
+
+  // ==========================================================================
   // SYNC OUTBOX & CHECKPOINTS
   // ==========================================================================
 
@@ -479,6 +563,62 @@ class AppDatabase extends _$AppDatabase {
             isSensitive: Value((remote['is_sensitive'] as bool?) ?? false),
             uploadStatus: Value((remote['upload_status'] as String?) ?? 'synced'),
             createdAt: Value(_parseDateTime(remote['created_at']) ?? remoteUpdatedAt),
+            updatedAt: Value(remoteUpdatedAt),
+            deletedAt: Value(_parseDateTime(remote['deleted_at'])),
+          ),
+        );
+        return true;
+
+      case 'moving_projects':
+        final id = remote['id'] as String;
+        final local =
+            await (select(movingProjects)..where((t) => t.id.equals(id)))
+                .getSingleOrNull();
+        if (local != null && local.updatedAt.toUtc().isAfter(remoteUpdatedAt)) {
+          return false;
+        }
+        await into(movingProjects).insertOnConflictUpdate(
+          MovingProjectsCompanion(
+            id: Value(id),
+            householdId: Value(remote['household_id'] as String),
+            name: Value(remote['name'] as String),
+            originAddress: Value(remote['origin_address'] as String?),
+            destinationAddress: Value(remote['destination_address'] as String?),
+            targetMoveDate: Value(_parseDateTime(remote['target_move_date'])),
+            status: Value((remote['status'] as String?) ?? 'planning'),
+            notes: Value(remote['notes'] as String?),
+            createdAt:
+                Value(_parseDateTime(remote['created_at']) ?? remoteUpdatedAt),
+            updatedAt: Value(remoteUpdatedAt),
+            deletedAt: Value(_parseDateTime(remote['deleted_at'])),
+          ),
+        );
+        return true;
+
+      case 'moving_boxes':
+        final id = remote['id'] as String;
+        final local =
+            await (select(movingBoxes)..where((t) => t.id.equals(id)))
+                .getSingleOrNull();
+        if (local != null && local.updatedAt.toUtc().isAfter(remoteUpdatedAt)) {
+          return false;
+        }
+        await into(movingBoxes).insertOnConflictUpdate(
+          MovingBoxesCompanion(
+            id: Value(id),
+            householdId: Value(remote['household_id'] as String),
+            projectId: Value(remote['project_id'] as String),
+            locationId: Value(remote['location_id'] as String),
+            boxCode: Value(remote['box_code'] as String),
+            labelQr: Value(remote['label_qr'] as String),
+            destinationRoom: Value(remote['destination_room'] as String?),
+            status: Value((remote['status'] as String?) ?? 'packing'),
+            isFragile: Value((remote['is_fragile'] as bool?) ?? false),
+            priority: Value((remote['priority'] as String?) ?? 'medium'),
+            weightKg: Value((remote['weight_kg'] as num?)?.toDouble()),
+            notes: Value(remote['notes'] as String?),
+            createdAt:
+                Value(_parseDateTime(remote['created_at']) ?? remoteUpdatedAt),
             updatedAt: Value(remoteUpdatedAt),
             deletedAt: Value(_parseDateTime(remote['deleted_at'])),
           ),

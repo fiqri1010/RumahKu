@@ -236,6 +236,7 @@ class MovingProjects extends Table with SyncColumns {
   Set<Column<Object>> get primaryKey => {id};
 }
 
+@DataClassName('MovingBox')
 class MovingBoxes extends Table with SyncColumns {
   TextColumn get id => text()();
   TextColumn get householdId => text().references(Households, #id)();

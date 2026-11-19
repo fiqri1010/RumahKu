@@ -2,6 +2,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:rumahku/core/database/app_database.dart';
 import 'package:rumahku/core/database/domain_enums.dart';
 import 'package:rumahku/core/providers.dart';
@@ -227,12 +228,57 @@ class ItemDetailContent extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Identitas & Kode',
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleSmall
-                          ?.copyWith(fontWeight: FontWeight.w700),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Identitas & Kode',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleSmall
+                              ?.copyWith(fontWeight: FontWeight.w700),
+                        ),
+                        if (item.qrCode != null && item.qrCode!.isNotEmpty)
+                          TextButton.icon(
+                            onPressed: () => showDialog<void>(
+                              context: context,
+                              builder: (ctx) => AlertDialog(
+                                title: Text(item.name),
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(12),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: QrImageView(
+                                        data: item.qrCode!,
+                                        version: QrVersions.auto,
+                                        size: 200,
+                                        backgroundColor: Colors.white,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    SelectableText(
+                                      item.qrCode!,
+                                      style: Theme.of(ctx).textTheme.bodySmall,
+                                    ),
+                                  ],
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.of(ctx).pop(),
+                                    child: const Text('Tutup'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            icon: const Icon(Icons.qr_code_2, size: 18),
+                            label: const Text('Lihat QR'),
+                          ),
+                      ],
                     ),
                     const SizedBox(height: 10),
                     _DetailRow(

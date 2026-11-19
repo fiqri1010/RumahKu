@@ -149,6 +149,11 @@ class HomeDashboardScreen extends ConsumerWidget {
                   icon: const Icon(Icons.create_new_folder_outlined),
                   label: const Text('Tambah Lokasi'),
                 ),
+                OutlinedButton.icon(
+                  onPressed: () => context.push('/scan'),
+                  icon: const Icon(Icons.qr_code_scanner),
+                  label: const Text('Scan QR'),
+                ),
               ],
             ),
 
@@ -172,7 +177,7 @@ class HomeDashboardScreen extends ConsumerWidget {
                   _ModuleShortcut(
                     title: 'Pindahan & QR',
                     subtitle: 'Kardus, cetak stiker, status truk',
-                    badge: 'M2',
+                    badge: 'Aktif',
                     icon: Icons.local_shipping_outlined,
                     color: const Color(0xFFD97706),
                     route: '/moving',

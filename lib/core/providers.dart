@@ -9,6 +9,8 @@ import 'package:rumahku/core/sync/supabase_sync_adapter.dart';
 import 'package:rumahku/core/sync/sync_adapter.dart';
 import 'package:rumahku/core/sync/sync_engine.dart';
 import 'package:rumahku/features/inventory/data/inventory_repository.dart';
+import 'package:rumahku/features/moving/data/moving_repository.dart';
+import 'package:rumahku/features/moving/services/moving_export_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 final appConfigProvider = Provider<AppConfig>(
@@ -50,6 +52,14 @@ final inventoryRepositoryProvider = Provider<InventoryRepository>((ref) {
     mediaService: ref.watch(mediaStorageServiceProvider),
   );
 });
+
+final movingRepositoryProvider = Provider<MovingRepository>((ref) {
+  return MovingRepository(db: ref.watch(appDatabaseProvider));
+});
+
+final movingExportServiceProvider = Provider<MovingExportService>(
+  (ref) => const MovingExportService(),
+);
 
 /// Bootstraps the default local household if none exists, then streams it.
 final activeHouseholdProvider = StreamProvider<Household?>((ref) async* {

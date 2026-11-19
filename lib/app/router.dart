@@ -8,6 +8,9 @@ import 'package:rumahku/features/inventory/presentation/item_detail_screen.dart'
 import 'package:rumahku/features/inventory/presentation/item_form_screen.dart';
 import 'package:rumahku/features/inventory/presentation/items_list_screen.dart';
 import 'package:rumahku/features/inventory/presentation/locations_tree_screen.dart';
+import 'package:rumahku/features/moving/presentation/moving_box_detail_screen.dart';
+import 'package:rumahku/features/moving/presentation/moving_dashboard_screen.dart';
+import 'package:rumahku/features/moving/presentation/qr_scanner_screen.dart';
 import 'package:rumahku/features/placeholders/presentation/milestone_placeholder_screen.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
@@ -37,23 +40,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: '/moving',
-            pageBuilder: (context, state) => const NoTransitionPage(
-              child: MilestonePlaceholderScreen(
-                title: 'Mode Pindahan & Stiker QR',
-                milestoneTag: 'Milestone 2',
-                icon: Icons.local_shipping_outlined,
-                accentColor: Color(0xFFD97706),
-                description:
-                    'Kelola proyek pindahan rumah dengan kardus ber-QR, status pengiriman real-time, dan manifest pindahan.',
-                plannedFeatures: [
-                  'Buat Proyek Pindahan (alamat asal, tujuan, target tanggal)',
-                  'Manajemen Kardus/Box dengan kode QR & ruangan tujuan',
-                  'Pindah barang/rak buku secara massal ke kardus (bulk move)',
-                  'Lacak status kardus: Packing → Siap Angkut → Di Truk → Sampai → Dibongkar',
-                  'Cetak lembar stiker QR A4 / printer thermal & export Manifest PDF/CSV',
-                ],
-              ),
-            ),
+            pageBuilder: (context, state) =>
+                const NoTransitionPage(child: MovingDashboardScreen()),
           ),
           GoRoute(
             path: '/books',
@@ -164,6 +152,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => ItemFormScreen(
           itemId: state.pathParameters['id']!,
         ),
+      ),
+      GoRoute(
+        path: '/moving/box/:id',
+        builder: (context, state) => MovingBoxDetailScreen(
+          boxId: state.pathParameters['id']!,
+        ),
+      ),
+      GoRoute(
+        path: '/scan',
+        builder: (context, state) => const QrScannerScreen(),
       ),
     ],
   );

@@ -26,6 +26,8 @@
 	<string>$(PRODUCT_COPYRIGHT)</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
+	<key>NSCameraUsageDescription</key>
+	<string>RumahKu memerlukan kamera untuk memindai stiker QR kardus pindahan dan barcode barang.</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 </dict>

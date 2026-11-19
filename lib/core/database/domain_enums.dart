@@ -126,3 +126,88 @@ enum AttachmentKind {
         orElse: () => AttachmentKind.photo,
       );
 }
+
+enum MovingProjectStatus {
+  planning('planning', 'Perencanaan', Color(0xFF0284C7)),
+  packing('packing', 'Sedang Packing', Color(0xFFD97706)),
+  inTransit('in_transit', 'Dalam Perjalanan', Color(0xFF7C3AED)),
+  completed('completed', 'Selesai', Color(0xFF15803D));
+
+  const MovingProjectStatus(this.dbValue, this.label, this.color);
+  final String dbValue;
+  final String label;
+  final Color color;
+
+  static MovingProjectStatus fromDb(String value) =>
+      MovingProjectStatus.values.firstWhere(
+        (e) => e.dbValue == value,
+        orElse: () => MovingProjectStatus.planning,
+      );
+}
+
+enum MovingBoxStatus {
+  packing(
+    'packing',
+    'Packing',
+    Icons.inventory_2_outlined,
+    Color(0xFFD97706),
+  ),
+  ready(
+    'ready',
+    'Siap Angkut',
+    Icons.check_box_outlined,
+    Color(0xFF0284C7),
+  ),
+  inTransit(
+    'in_transit',
+    'Di Truk',
+    Icons.local_shipping_outlined,
+    Color(0xFF7C3AED),
+  ),
+  arrived(
+    'arrived',
+    'Sampai',
+    Icons.home_outlined,
+    Color(0xFF0F766E),
+  ),
+  unpacked(
+    'unpacked',
+    'Dibongkar',
+    Icons.done_all,
+    Color(0xFF15803D),
+  );
+
+  const MovingBoxStatus(this.dbValue, this.label, this.icon, this.color);
+  final String dbValue;
+  final String label;
+  final IconData icon;
+  final Color color;
+
+  MovingBoxStatus? get nextStatus {
+    final nextIdx = index + 1;
+    if (nextIdx >= MovingBoxStatus.values.length) return null;
+    return MovingBoxStatus.values[nextIdx];
+  }
+
+  static MovingBoxStatus fromDb(String value) =>
+      MovingBoxStatus.values.firstWhere(
+        (e) => e.dbValue == value,
+        orElse: () => MovingBoxStatus.packing,
+      );
+}
+
+enum BoxPriority {
+  high('high', 'Tinggi (Buka Duluan)', Color(0xFFDC2626)),
+  medium('medium', 'Sedang', Color(0xFFD97706)),
+  low('low', 'Rendah', Color(0xFF64748B));
+
+  const BoxPriority(this.dbValue, this.label, this.color);
+  final String dbValue;
+  final String label;
+  final Color color;
+
+  static BoxPriority fromDb(String value) => BoxPriority.values.firstWhere(
+        (e) => e.dbValue == value,
+        orElse: () => BoxPriority.medium,
+      );
+}

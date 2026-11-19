@@ -25,6 +25,8 @@ class SyncEngine {
     'locations',
     'items',
     'item_attachments',
+    'moving_projects',
+    'moving_boxes',
   ];
 
   bool _isRunning = false;

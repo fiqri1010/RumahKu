@@ -42,7 +42,31 @@ String generateInviteCode() {
   return '$part1-$part2';
 }
 
-/// Generates a compact human-readable QR payload URI for an item or location.
+/// Generates a compact human-readable QR payload URI for an item, location, or box.
 String buildRumahKuQrUri({required String entityType, required String id}) {
   return 'rumahku://$entityType/$id';
+}
+
+/// Result of parsing a RumahKu QR URI (`rumahku://box/<id>`, `rumahku://item/<id>`, etc.).
+class ParsedRumahKuQr {
+  const ParsedRumahKuQr({required this.entityType, required this.id});
+
+  final String entityType;
+  final String id;
+}
+
+/// Parses a `rumahku://<entityType>/<id>` QR payload, returning `null` if the
+/// input does not match the RumahKu URI scheme.
+ParsedRumahKuQr? parseRumahKuQrUri(String raw) {
+  final trimmed = raw.trim();
+  if (trimmed.isEmpty) return null;
+  final uri = Uri.tryParse(trimmed);
+  if (uri == null || uri.scheme.toLowerCase() != 'rumahku') return null;
+
+  final entityType = uri.host.toLowerCase();
+  if (entityType.isEmpty || uri.pathSegments.isEmpty) return null;
+  final id = uri.pathSegments.first.trim();
+  if (id.isEmpty) return null;
+
+  return ParsedRumahKuQr(entityType: entityType, id: id);
 }
