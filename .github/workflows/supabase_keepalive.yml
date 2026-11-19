@@ -1,0 +1,30 @@
+name: Supabase Free Tier Keep-Alive
+
+# Prevents Supabase Free Tier automatic 7-day inactivity pause (100% free via GitHub Actions).
+# Add repository secrets: SUPABASE_URL and SUPABASE_ANON_KEY when you enable cloud sync.
+
+on:
+  schedule:
+    # Runs every 4 days at 02:00 UTC
+    - cron: '0 2 */4 * *'
+  workflow_dispatch:
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase health table
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_ANON_KEY" ]; then
+            echo "SUPABASE_URL / SUPABASE_ANON_KEY belum diisi di GitHub Secrets. Melewati ping."
+            exit 0
+          fi
+          curl -fsSL \
+            -H "apikey: $SUPABASE_ANON_KEY" \
+            -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
+            "$SUPABASE_URL/rest/v1/health_pings?select=id,last_ping_at&limit=1"
+          echo ""
+          echo "Supabase keep-alive ping berhasil."
